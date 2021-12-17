@@ -1,5 +1,6 @@
 const express = require("express");
 const { MongoClient } = require("mongodb");
+const ObjectId = require("mongodb").ObjectId;
 const CORS = require("cors");
 require("dotenv").config();
 const app = express();
@@ -19,6 +20,13 @@ const run = () => {
   app.get("/products", async (req, res) => {
     const cursor = products.find({});
     const data = await cursor.toArray();
+    res.json(data);
+  });
+  app.get("/product/:id", async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: ObjectId(id) };
+
+    const data = await products.findOne(query);
     res.json(data);
   });
 };
